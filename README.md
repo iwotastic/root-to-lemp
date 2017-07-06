@@ -81,7 +81,28 @@ sudo apt-get install mysql-server
 sudo mysql_secure_installation
 ```
 
+## Step 8 - Get PHP
+It's easy to get with:
+```
+sudo apt-get install php-fpm php-mysql
+```
+Let's make it more secure with running...
+```
+sudo nano /etc/php/7.0/fpm/php.ini
+```
+...and finding the line with `;cgi.fix_pathinfo=1` and change it to `cgi.fix_pathinfo=0`. Finally, we restart PHP with
+```
+sudo systemctl restart php7.0-fpm
+```
 
+## Step 9 - You're done!
+For every NGINX server block you want to use PHP on you have to add the following code.
+```nginx
+location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+}
+```
 
 # License
 [![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
