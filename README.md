@@ -39,8 +39,50 @@ ssh-copy-id [YOUR USERNAME]@[YOUR SERVER IP HERE]
 ```
 
 ## Step 4 - Make it Secure
-Now, let's force users to use the SSH keys by disabling password based authentication.
+First let's log back on the server, with...
+```
+ssh [YOUR USERNAME]@[YOUR SERVER IP HERE]
+```
+Now, let's force users to use the SSH keys by disabling password based authentication, by running...
+```
+sudo nano /etc/ssh/sshd_config
+```
+...and edit the line that says `PasswordAuthentication yes` to `PasswordAuthentication no`. Now let's restart SSH with...
+```
+sudo systemctl reload sshd
+```
+
+## Step 5 - Firewall time!
+To set up a firewall, run the following commands.
+```
+sudo ufw allow OpenSSH
+sudo ufw enable
+```
+
+## Step 6 - NGINX.
+To install NGINX run these commands:
+```
+sudo apt-get update
+sudo apt-get install nginx
+```
+Now let's add NGINX to the firewall whitelist by running...
+```
+sudo ufw allow 'Nginx HTTP'
+```
+You should see a welcome page if you go to `http://[YOUR SERVER IP]`.
+
+## Step 7 - It's *MY* SQL
+First, install MySQL with...
+```
+sudo apt-get install mysql-server
+```
+...and secure your installation with...
+```
+sudo mysql_secure_installation
+```
+
+
 
 # License
 [![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
-The entirety of this README file is licensed under
+The entirety of this README file is licensed under the Creative Commons Attribution-ShareAlike 4.0 International.
